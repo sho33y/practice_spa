@@ -1,0 +1,56 @@
+services:
+  apache:
+    build: docker/apache
+    ports:
+      - ${HTTP_PORT}:80
+    volumes:
+      - ./laravel:/var/www/html:cached
+    depends_on:
+      - laravel
+    restart: always
+    environment:
+      TZ: Asia/Tokyo
+    tty: true
+    stdin_open: true
+
+  db:
+    build:
+      context: docker/mysql
+      args:
+        MYSQL_VERSION: ${MYSQL_VERSION}
+    volumes:
+      - ./docker/mysql/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf
+      - db_data:/var/lib/mysql
+    ports:
+      - ${MYSQL_PORT}:3306
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      TZ: Asia/Tokyo
+    restart: always
+    tty: true
+    stdin_open: true
+
+  laravel:
+    build:
+      context: docker/php
+      args:
+        PHP_VERSION: ${PHP_VERSION}
+    volumes:
+      - ./laravel:/var/www/html:cached
+    depends_on:
+      - db
+    restart: always
+    tty: true
+    stdin_open: true
+
+  mail:
+    image: axllent/mailpit:latest
+    ports:
+      - ${MAIL_PORT_HTTP}:8025
+      - ${MAIL_PORT_SMTP}:1025
+
+volumes:
+  db_data:
