@@ -4,10 +4,10 @@ import { createRouter, createWebHistory } from "vue-router";
 import GuestLayout from "@/layouts/Guest.vue";
 
 import Home from '@/pages/Home.vue';
-import PostsIndex from "@/pages/Posts/Index.vue";
-// import PostsCreate from "../components/Posts/Create.vue";
-// import PostsEdit from "../components/Posts/Edit.vue";
-//
+import TasksIndex from "@/pages/Tasks/Index.vue";
+import TasksCreate from "@/pages/Tasks/Create.vue";
+import TasksDetail from "@/pages/Tasks/Detail.vue";
+import TasksEdit from "@/pages/Tasks/Edit.vue";
 // import Login from "../components/Login.vue";
 
 // function auth(to, from, next) {
@@ -30,28 +30,36 @@ const routes = [
                 meta: { title: 'Home' },
             },
             {
-                path: "/posts",
-                name: "posts.index",
-                component: PostsIndex,
-                meta: { title: "Posts" },
+                path: "/tasks",
+                name: "tasks.index",
+                component: TasksIndex,
+                meta: { title: "Tasks" },
             },
-            // {
-            //     path: '/about',
-            //     name: 'about',
-            //     component: About,
-            //     meta: {title:'About us'},
-            // },
+            {
+                path: "/tasks/create",
+                name: "tasks.create",
+                component: TasksCreate,
+                meta: { title: "Tasks Create" },
+            },
+            {
+                path: "/tasks/:id",
+                name: "tasks.detail",
+                component: TasksDetail,
+                meta: { title: "Tasks Detail" },
+                props: true,
+            },
+            {
+                path: "/tasks/:id/edit",
+                name: "tasks.edit",
+                component: TasksEdit,
+                meta: { title: "Tasks Edit" },
+                props: true,
+            },
             // {
             //     path: '/login',
             //     name: 'login',
             //     component: Login,
             //     meta: {title:'Login'},
-            // },
-            // {
-            //     path: '/register',
-            //     name: 'register',
-            //     component: Register,
-            //     meta: {title:'Register'},
             // },
         ]
     },
