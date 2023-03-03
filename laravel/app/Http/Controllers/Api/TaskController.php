@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\Task;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -34,8 +31,7 @@ class TaskController extends BaseController
      */
     public function create(Request $request): JsonResponse
     {
-//        return self::formatResponse(['task' => Task::create($request->all())]);
-        return self::formatResponse();
+        return self::formatResponse(['task' => Task::create($request->all())]);
     }
 
     /**
