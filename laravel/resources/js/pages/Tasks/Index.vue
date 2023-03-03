@@ -13,68 +13,65 @@
             </tr>
         </thead>
         <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>Title1</td>
-            <td>Content1</td>
-            <td>Ichiro</td>
-            <td>
-                <router-link :to="{name: 'tasks.detail', params: {id: 1}}">
-                    <button class="btn btn-primary">Show</button>
-                </router-link>
-            </td>
-            <td>
-                <router-link :to="{name: 'tasks.edit', params: {id: 1}}">
-                    <button class="btn btn-primary">Edit</button>
-                </router-link>
-            </td>
-            <td>
-                <button class="btn btn-danger">Delete</button>
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">2</th>
-            <td>Title2</td>
-            <td>Content2</td>
-            <td>Jiro</td>
-            <td>
-                <router-link :to="{name: 'tasks.detail', params: {id: 2}}">
-                    <button class="btn btn-primary">Show</button>
-                </router-link>
-            </td>
-            <td>
-                <router-link :to="{name: 'tasks.edit', params: {id: 2}}">
-                    <button class="btn btn-primary">Edit</button>
-                </router-link>
-            </td>
-            <td>
-                <button class="btn btn-danger">Delete</button>
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td>Title3</td>
-            <td>Content3</td>
-            <td>Saburo</td>
-            <td>
-                <router-link :to="{name: 'tasks.detail', params: {id: 3}}">
-                    <button class="btn btn-primary">Show</button>
-                </router-link>
-            </td>
-            <td>
-                <router-link :to="{name: 'tasks.edit', params: {id: 3}}">
-                    <button class="btn btn-primary">Edit</button>
-                </router-link>
-            </td>
-            <td>
-                <button class="btn btn-danger">Delete</button>
-            </td>
-        </tr>
+            <tr v-for="(task, index) in tasks" :key="index">
+                 <th scope="row">{{ task.id }}</th>
+                 <td>{{ task.title }}</td>
+                 <td>{{ task.content }}</td>
+                 <td>{{ task.person_in_charge }}</td>
+                 <td>
+                     <router-link v-bind:to="{name: 'tasks.detail', params: {id: task.id }}">
+                         <button class="btn btn-primary">Show</button>
+                     </router-link>
+                 </td>
+                 <td>
+                     <router-link v-bind:to="{name: 'tasks.edit', params: {id: task.id }}">
+                         <button class="btn btn-success">Edit</button>
+                     </router-link>
+                 </td>
+                 <td>
+                     <button
+                         class="btn btn-danger"
+                         @click="deleteTask(task.id)"
+                     >
+                         Delete
+                     </button>
+                 </td>
+             </tr>
         </tbody>
     </table>
     </div>
 </template>
 
 <script>
-export default {}
+import { ref, onMounted } from 'vue';
+import { pbStore } from '@/store/pb';
+
+export default {
+    setup(props, context) {
+        const tasks = ref([]);
+        const pb = pbStore();
+
+        const getTasks = async () => {
+            let response = await axios.get('/api/tasks');
+            tasks.value = response.data.tasks;
+            await pb.finish();
+        }
+
+        const deleteTask = async (id) => {
+            await pb.start(100);
+            await axios.delete('/api/tasks/' + id);
+            await getTasks();
+            await pb.finish();
+        }
+
+        onMounted(async () => {
+            await getTasks();
+        });
+
+        return {
+            tasks,
+            deleteTask,
+        }
+    },
+}
 </script>

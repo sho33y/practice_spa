@@ -1,22 +1,24 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory } from 'vue-router';
+import { pbStore } from '@/store/pb';
 
-// import AuthenticatedLayout from "../layouts/Authenticated.vue";
-import GuestLayout from "@/layouts/Guest.vue";
+// import AuthenticatedLayout from '../layouts/Authenticated.vue';
+import GuestLayout from '@/layouts/Guest.vue';
 
 import Home from '@/pages/Home.vue';
-import TasksIndex from "@/pages/Tasks/Index.vue";
-import TasksCreate from "@/pages/Tasks/Create.vue";
-import TasksDetail from "@/pages/Tasks/Detail.vue";
-import TasksEdit from "@/pages/Tasks/Edit.vue";
-// import Login from "../components/Login.vue";
+import TasksIndex from '@/pages/Tasks/Index.vue';
+import TasksCreate from '@/pages/Tasks/Create.vue';
+import TasksDetail from '@/pages/Tasks/Detail.vue';
+import TasksEdit from '@/pages/Tasks/Edit.vue';
+// import Login from '../components/Login.vue';
 
 // function auth(to, from, next) {
-//     if (JSON.parse(localStorage.getItem("loggedIn"))) {
+//     if (JSON.parse(localStorage.getItem('loggedIn'))) {
 //         next();
 //     }
 //
-//     next("/login");
+//     next('/login');
 // }
+
 
 const routes = [
     {
@@ -30,29 +32,29 @@ const routes = [
                 meta: { title: 'Home' },
             },
             {
-                path: "/tasks",
-                name: "tasks.index",
+                path: '/tasks',
+                name: 'tasks.index',
                 component: TasksIndex,
-                meta: { title: "Tasks" },
+                meta: { title: 'Tasks', customPbFinish: true },
             },
             {
-                path: "/tasks/create",
-                name: "tasks.create",
+                path: '/tasks/create',
+                name: 'tasks.create',
                 component: TasksCreate,
-                meta: { title: "Tasks Create" },
+                meta: { title: 'Tasks Create' },
             },
             {
-                path: "/tasks/:id",
-                name: "tasks.detail",
+                path: '/tasks/:id',
+                name: 'tasks.detail',
                 component: TasksDetail,
-                meta: { title: "Tasks Detail" },
+                meta: { title: 'Tasks Detail', customPbFinish: true },
                 props: true,
             },
             {
-                path: "/tasks/:id/edit",
-                name: "tasks.edit",
+                path: '/tasks/:id/edit',
+                name: 'tasks.edit',
                 component: TasksEdit,
-                meta: { title: "Tasks Edit" },
+                meta: { title: 'Tasks Edit', customPbFinish: true },
                 props: true,
             },
             // {
@@ -68,28 +70,45 @@ const routes = [
     //     beforeEnter: auth,
     //     children: [
     //         {
-    //             path: "/posts",
-    //             name: "posts.index",
+    //             path: '/posts',
+    //             name: 'posts.index',
     //             component: PostsIndex,
-    //             meta: { title: "Posts" },
+    //             meta: { title: 'Posts' },
     //         },
     //         {
-    //             path: "/posts/create",
-    //             name: "posts.create",
+    //             path: '/posts/create',
+    //             name: 'posts.create',
     //             component: PostsCreate,
-    //             meta: { title: "Add new post" },
+    //             meta: { title: 'Add new post' },
     //         },
     //         {
-    //             path: "/posts/edit/:id",
-    //             name: "posts.edit",
+    //             path: '/posts/edit/:id',
+    //             name: 'posts.edit',
     //             component: PostsEdit,
-    //             meta: { title: "Edit post" },
+    //             meta: { title: 'Edit post' },
     //         },
     //     ],
     // },
 ];
 
-export default createRouter({
+const router = createRouter({
     history: createWebHistory(),
     routes,
 });
+
+router.beforeResolve((to, from, next) => {
+    if (to.name && !pbStore().isLoading) {
+        pbStore().start();
+    }
+    next();
+})
+
+router.afterEach( (to, from) => {
+    const customPbFinish = to.meta.customPbFinish;
+    if (customPbFinish === undefined || customPbFinish === false) {
+        // await new Promise(resolve => setTimeout(resolve, 400));
+        pbStore().finish();
+    }
+})
+
+export default router

@@ -1,6 +1,7 @@
 <template>
     <v-header></v-header>
-    <div>
+    <div class="relative">
+        <progress-bar></progress-bar>
         <router-view></router-view>
     </div>
 </template>
