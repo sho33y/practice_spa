@@ -5,10 +5,10 @@ import { pbStore } from '@/store/pb';
 import GuestLayout from '@/layouts/Guest.vue';
 
 import Home from '@/pages/Home.vue';
-import TasksIndex from '@/pages/Tasks/Index.vue';
-import TasksCreate from '@/pages/Tasks/Create.vue';
-import TasksDetail from '@/pages/Tasks/Detail.vue';
-import TasksEdit from '@/pages/Tasks/Edit.vue';
+import TasksIndex from '@/pages/tasks/Index.vue';
+import TasksCreate from '@/pages/tasks/Create.vue';
+import TasksDetail from '@/pages/tasks/Detail.vue';
+import TasksEdit from '@/pages/tasks/Edit.vue';
 // import Login from '../components/Login.vue';
 
 // function auth(to, from, next) {
