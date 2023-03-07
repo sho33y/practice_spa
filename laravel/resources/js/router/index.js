@@ -1,10 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { authStore } from '@/store/auth';
 import { pbStore } from '@/store/pb';
 
 // import AuthenticatedLayout from '../layouts/Authenticated.vue';
 import GuestLayout from '@/layouts/Guest.vue';
 
 import Home from '@/pages/Home.vue';
+import Login from '@/pages/member/auth/Login.vue';
+import Register from '@/pages/member/auth/Register.vue';
+import MemberHome from '@/pages/member/Home.vue';
 import TasksIndex from '@/pages/tasks/Index.vue';
 import TasksCreate from '@/pages/tasks/Create.vue';
 import TasksDetail from '@/pages/tasks/Detail.vue';
@@ -57,12 +61,24 @@ const routes = [
                 meta: { title: 'Tasks Edit', customPbFinish: true },
                 props: true,
             },
-            // {
-            //     path: '/login',
-            //     name: 'login',
-            //     component: Login,
-            //     meta: {title:'Login'},
-            // },
+            {
+                path: '/member/register',
+                name: 'member.register',
+                component: Register,
+                meta: { title: 'Register' },
+            },
+            {
+                path: '/member/login',
+                name: 'member.login',
+                component: Login,
+                meta: { title:'Login' },
+            },
+            {
+                path: '/member',
+                name: 'member.home',
+                component: MemberHome,
+                meta: { title: 'Member Home' },
+            },
         ]
     },
     // {
@@ -96,18 +112,26 @@ const router = createRouter({
     routes,
 });
 
-router.beforeResolve((to, from, next) => {
-    if (to.name && !pbStore().isLoading) {
-        pbStore().start();
+router.beforeResolve(async (to, from, next) => {
+    const pb = pbStore();
+
+    if (to.name && !pb.isLoading) {
+        await pb.start();
     }
     next();
 })
 
-router.afterEach( (to, from) => {
+router.afterEach( async (to, from) => {
     const customPbFinish = to.meta.customPbFinish;
+
+    // 初回読み込み時にログインユーザー情報をセットする
+    if (!from.name) {
+        await authStore().checkAuthenticated();
+    }
+
     if (customPbFinish === undefined || customPbFinish === false) {
         // await new Promise(resolve => setTimeout(resolve, 400));
-        pbStore().finish();
+        await pbStore().finish();
     }
 })
 
