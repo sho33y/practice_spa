@@ -50,7 +50,7 @@
 <script>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { pbStore } from "@/store/pb";
+import { pbStore } from "@/store/progress-bar";
 
 export default {
     setup(props, context) {
@@ -60,8 +60,8 @@ export default {
         const pb = pbStore();
         const register = async () => {
             try {
-                await pb.start(40);
-                await axios.post('/api/register', user.value);
+                await pb.start();
+                await axios.post('/api/member/register', user.value);
                 await router.push({name: 'member.login'});
             } catch (error) {
                 errors.value = error.response?.data?.errors;

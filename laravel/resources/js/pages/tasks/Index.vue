@@ -44,7 +44,7 @@
 
 <script>
 import { ref, onMounted } from 'vue';
-import { pbStore } from '@/store/pb';
+import { pbStore } from '@/store/progress-bar';
 
 export default {
     setup(props, context) {

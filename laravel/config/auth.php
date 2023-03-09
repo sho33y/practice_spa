@@ -40,6 +40,14 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
+        'member' => [
+            'driver' => 'session',
+            'provider' => 'members',
+        ],
     ],
 
     /*
@@ -64,11 +72,14 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
+        ],
+        'members' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Member::class,
+        ],
     ],
 
     /*
@@ -111,5 +122,17 @@ return [
     */
 
     'password_timeout' => 10800,
+
+    // ログイン失敗回数
+    'max_attempts' => [
+        'admin' => 10,
+        'member' => 10,
+    ],
+
+    // ログイン失敗後再入力出来るまでの時間
+    'decay_seconds' => [
+        'admin' => 60 * 30, // 60秒*30=30分
+        'member' => 60 * 30,
+    ],
 
 ];

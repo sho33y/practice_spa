@@ -2,18 +2,22 @@
     <router-link :to="{ name: 'home' }">
         <div>ヘッダー</div>
     </router-link>
-    <div v-if="auth.isAuthenticated && auth.user">ログイン中のユーザー: {{ auth.user.email }}</div>
+    <div v-if="as.isAuthenticated && as.admin">ログイン中のシステム管理者: {{ as.admin.email }}</div>
+    <div v-if="ms.isAuthenticated && ms.member">ログイン中のユーザー: {{ ms.member.email }}</div>
 </template>
 
 <script>
-import { authStore } from '@/store/auth';
+import { adminStore } from '@/store/admin';
+import { memberStore } from '@/store/member';
 
 export default {
     setup(props, context) {
-        const auth = authStore();
+        const as = adminStore();
+        const ms = memberStore();
 
         return {
-            auth,
+            as,
+            ms,
         }
     },
 }

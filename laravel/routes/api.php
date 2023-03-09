@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\Api\Member\Auth\LoginController;
+use App\Helpers\Utility;
+use App\Http\Controllers\Api\Admin\BaseController as AdminBaseController;
+use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Member\Auth\RegisterController;
 use App\Http\Controllers\Api\Member\BaseController as MemberBaseController;
 use App\Http\Controllers\Api\TaskController;
-use App\Services\UserService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,13 +20,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('guest')->group(function () {
+    Route::post('/login/{guard}', [LoginController::class, 'create'])->whereIn('guard', Utility::getGuardNames());
     Route::post('/member/register', RegisterController::class);
-    Route::post('/member/login', [LoginController::class, 'create']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout/{guard}', [LoginController::class, 'destroy'])->whereIn('guard', Utility::getGuardNames());
     Route::get('/member/{encrypted_id}', [MemberBaseController::class, 'getMemberByEncryptedId']);
-    Route::post('/member/logout', [LoginController::class, 'destroy']);
+    Route::get('/admin/{encrypted_id}', [AdminBaseController::class, 'getAdminByEncryptedId']);
 });
 
 Route::prefix('tasks')->group(function () {

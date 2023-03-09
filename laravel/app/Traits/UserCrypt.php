@@ -1,19 +1,21 @@
 <?php
-namespace App\Services;
 
+namespace App\Traits;
+
+use App\Models\Member;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Crypt;
 
-class UserService
+trait UserCrypt
 {
     /**
-     * @param User $user
+     * @param string $id
      * @return string
      */
-    public function encryptId(User $user): string
+    public function encryptId(string $id): string
     {
-        return Crypt::encryptString($user->id);
+        return Crypt::encryptString($id);
     }
 
     /**
@@ -31,8 +33,10 @@ class UserService
      */
     public function getByEncryptedId(string $id): Model|User
     {
-        return User::query()
+        $user = User::query()
             ->where('id', $this->decryptId($id))
             ->firstOrFail();
+
+        return $user->castByType();
     }
 }

@@ -40,7 +40,7 @@
 <script>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { pbStore } from "@/store/pb";
+import { pbStore } from "@/store/progress-bar";
 
 export default {
     setup(props, context) {
@@ -51,7 +51,7 @@ export default {
 
         const save = async () => {
             try {
-                await pb.start(40);
+                await pb.start();
                 await axios.post('/api/tasks/create', task.value);
                 await router.push({name: 'tasks.index'});
             } catch (error) {

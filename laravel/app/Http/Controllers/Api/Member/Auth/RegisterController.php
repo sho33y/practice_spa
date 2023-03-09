@@ -18,6 +18,7 @@ class RegisterController extends BaseController
     {
         $data = $request->all();
         $data['password'] = Hash::make($data['password']);
+        $data['type'] = 'member';
         return self::formatResponse(['user' => User::create($data)]);
     }
 }

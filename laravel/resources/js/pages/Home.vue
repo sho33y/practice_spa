@@ -12,11 +12,9 @@
                     <button class="btn btn-success">タスク登録</button>
                 </router-link>
             </li>
-
-
-            <template v-if="auth.isAuthenticated">
+            <template v-if="ms.isAuthenticated">
                 <li>
-                    <div class="cursor-pointer" @click.prevent="logout">会員ログアウト</div>
+                    <div class="cursor-pointer" @click.prevent="memberLogout">会員ログアウト</div>
                 </li>
             </template>
             <template v-else>
@@ -31,31 +29,56 @@
                     </router-link>
                 </li>
             </template>
+            <template v-if="as.isAuthenticated">
+                <li>
+                    <div class="cursor-pointer" @click.prevent="adminLogout">システム管理者ログアウト</div>
+                </li>
+            </template>
+            <template v-else>
+                <li>
+                    <router-link :to="{ name: 'admin.login' }">
+                        <button class="btn btn-success">システム管理者ログイン</button>
+                    </router-link>
+                </li>
+            </template>
         </ul>
     </div>
 </template>
 
 <script>
-import { authStore } from '@/store/auth';
-import { pbStore } from '@/store/pb';
+import { adminStore } from '@/store/admin';
+import { memberStore } from '@/store/member';
+import { pbStore } from '@/store/progress-bar';
 
 export default {
     setup(props, context) {
-        const auth = authStore();
+        const as = adminStore();
+        const ms = memberStore();
         const pb = pbStore();
 
-        const logout = async () => {
+        const adminLogout = async () => {
             try {
-                await pb.start(40);
-                await auth.logout();
+                await pb.start();
+                await as.logout();
+            } catch (error) {
+                await pb.finish();
+            }
+        }
+
+        const memberLogout = async () => {
+            try {
+                await pb.start();
+                await ms.logout();
             } catch (error) {
                 await pb.finish();
             }
         }
 
         return {
-            auth,
-            logout,
+            as,
+            ms,
+            adminLogout,
+            memberLogout,
         }
     },
 }

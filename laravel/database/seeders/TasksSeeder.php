@@ -6,7 +6,7 @@ use App\Models\Task;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class TasksTableSeeder extends Seeder
+class TasksSeeder extends Seeder
 {
     /**
      * Run the database seeds.

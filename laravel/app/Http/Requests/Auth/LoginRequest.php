@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Member\Auth;
+namespace app\Http\Requests\Auth;
 
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
@@ -11,6 +11,8 @@ use Illuminate\Validation\ValidationException;
 
 class LoginRequest extends FormRequest
 {
+    private string $guard;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -19,6 +21,16 @@ class LoginRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
+    }
+
+    /**
+     * バリデーション準備
+     *
+     * @return void
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->guard = $this->route('guard');
     }
 
     /**
@@ -46,8 +58,8 @@ class LoginRequest extends FormRequest
         $this->ensureIsNotRateLimited();
         $throttleKey = $this->throttleKey();
 
-        if (!Auth::guard()->attempt($this->only('email', 'password'))) {
-            RateLimiter::hit($throttleKey, config('auth.decay_seconds.member'));
+        if (!Auth::guard($this->guard)->attempt($this->only('email', 'password'))) {
+            RateLimiter::hit($throttleKey, config("auth.decay_seconds.$this->guard"));
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
@@ -68,7 +80,7 @@ class LoginRequest extends FormRequest
     {
         $throttleKey = $this->throttleKey();
 
-        if (!RateLimiter::tooManyAttempts($throttleKey, config('auth.max_attempts.member'))) {
+        if (!RateLimiter::tooManyAttempts($throttleKey, config("auth.max_attempts.$this->guard"))) {
             return;
         }
 

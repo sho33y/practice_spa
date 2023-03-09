@@ -9,7 +9,7 @@ export const pbStore = defineStore('progress-bar', {
         }
     },
     actions: {
-        start(intervalTime = 10) {
+        start(intervalTime = 40) {
             this.progress = 0;
             this.isLoading = true;
             this.interval = setInterval(() => {

@@ -1,14 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { authStore } from '@/store/auth';
-import { pbStore } from '@/store/pb';
+import { adminStore } from '@/store/admin';
+import { memberStore } from '@/store/member';
+import { pbStore } from '@/store/progress-bar';
 
 // import AuthenticatedLayout from '../layouts/Authenticated.vue';
 import GuestLayout from '@/layouts/Guest.vue';
 
 import Home from '@/pages/Home.vue';
-import Login from '@/pages/member/auth/Login.vue';
+import AdminLogin from '@/pages/admin/auth/Login.vue';
+import MemberLogin from '@/pages/member/auth/Login.vue';
 import Register from '@/pages/member/auth/Register.vue';
-import MemberHome from '@/pages/member/Home.vue';
 import TasksIndex from '@/pages/tasks/Index.vue';
 import TasksCreate from '@/pages/tasks/Create.vue';
 import TasksDetail from '@/pages/tasks/Detail.vue';
@@ -70,14 +71,14 @@ const routes = [
             {
                 path: '/member/login',
                 name: 'member.login',
-                component: Login,
-                meta: { title:'Login' },
+                component: MemberLogin,
+                meta: { title: 'Login' },
             },
             {
-                path: '/member',
-                name: 'member.home',
-                component: MemberHome,
-                meta: { title: 'Member Home' },
+                path: '/admin/login',
+                name: 'admin.login',
+                component: AdminLogin,
+                meta: { title: 'Admin Login' },
             },
         ]
     },
@@ -126,7 +127,8 @@ router.afterEach( async (to, from) => {
 
     // 初回読み込み時にログインユーザー情報をセットする
     if (!from.name) {
-        await authStore().checkAuthenticated();
+        await adminStore().checkAuthenticated();
+        await memberStore().checkAuthenticated();
     }
 
     if (customPbFinish === undefined || customPbFinish === false) {

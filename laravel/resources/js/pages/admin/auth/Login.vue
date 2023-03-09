@@ -34,7 +34,7 @@
 <script>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { memberStore } from '@/store/member';
+import { adminStore } from '@/store/admin';
 import { pbStore } from '@/store/progress-bar';
 
 export default {
@@ -42,13 +42,13 @@ export default {
         const form = ref({});
         const errors = ref({});
         const router = useRouter();
-        const ms = memberStore();
+        const as = adminStore();
         const pb = pbStore();
 
         const login = async () => {
             try {
                 await pb.start();
-                await ms.login(form.value);
+                await as.login(form.value);
                 await router.push({name: 'home'});
             } catch (error) {
                 errors.value = error.response?.data?.errors;
