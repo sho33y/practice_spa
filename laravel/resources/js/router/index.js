@@ -3,18 +3,17 @@ import { adminStore } from '@/store/admin';
 import { memberStore } from '@/store/member';
 import { pbStore } from '@/store/progress-bar';
 
+import adminRoutes from '@/router/admin';
+import memberRoutes from '@/router/member';
+
 // import AuthenticatedLayout from '../layouts/Authenticated.vue';
 import GuestLayout from '@/layouts/Guest.vue';
 
 import Home from '@/pages/Home.vue';
-import AdminLogin from '@/pages/admin/auth/Login.vue';
-import MemberLogin from '@/pages/member/auth/Login.vue';
-import Register from '@/pages/member/auth/Register.vue';
 import TasksIndex from '@/pages/tasks/Index.vue';
 import TasksCreate from '@/pages/tasks/Create.vue';
 import TasksDetail from '@/pages/tasks/Detail.vue';
 import TasksEdit from '@/pages/tasks/Edit.vue';
-// import Login from '../components/Login.vue';
 
 // function auth(to, from, next) {
 //     if (JSON.parse(localStorage.getItem('loggedIn'))) {
@@ -23,7 +22,6 @@ import TasksEdit from '@/pages/tasks/Edit.vue';
 //
 //     next('/login');
 // }
-
 
 const routes = [
     {
@@ -62,25 +60,9 @@ const routes = [
                 meta: { title: 'Tasks Edit', customPbFinish: true },
                 props: true,
             },
-            {
-                path: '/member/register',
-                name: 'member.register',
-                component: Register,
-                meta: { title: 'Register' },
-            },
-            {
-                path: '/member/login',
-                name: 'member.login',
-                component: MemberLogin,
-                meta: { title: 'Login' },
-            },
-            {
-                path: '/admin/login',
-                name: 'admin.login',
-                component: AdminLogin,
-                meta: { title: 'Admin Login' },
-            },
-        ]
+            ...adminRoutes.routes,
+            ...memberRoutes.routes,
+        ],
     },
     // {
     //     component: AuthenticatedLayout,
