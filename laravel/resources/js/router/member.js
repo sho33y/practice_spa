@@ -1,26 +1,43 @@
+import authMember from "@/middleware/authMember";
+import guestMember from "@/middleware/guestMember";
+import MemberLayout from "@/layouts/Member.vue";
+import GuestLayout from "@/layouts/Guest.vue";
 import Register from "@/pages/member/auth/Register.vue";
-import MemberLogin from "@/pages/member/auth/Login.vue";
+import Login from "@/pages/member/auth/Login.vue";
+import Home from "@/pages/member/Home.vue";
 
 export default {
     routes: [
-        // {
-        //     redirect: { name: 'home' },
-        //     component: GuestLayout,
-        //     children: [
-        //
-        //     ],
-        // }
         {
-            path: '/member/register',
-            name: 'member.register',
-            component: Register,
-            meta: { title: 'Register' },
+            component: GuestLayout,
+            children: [
+                {
+                    path: '/member/register',
+                    name: 'member.register',
+                    component: Register,
+                    meta: { title: 'Register' },
+                },
+                {
+                    path: '/member/login',
+                    name: 'member.login',
+                    component: Login,
+                    meta: { title: 'Login' },
+                },
+            ],
+            meta: { middleware: [guestMember] },
         },
         {
-            path: '/member/login',
-            name: 'member.login',
-            component: MemberLogin,
-            meta: { title: 'Login' },
+            path: '/member',
+            component: MemberLayout,
+            children: [
+                {
+                    path: '',
+                    name: 'member.home',
+                    component: Home,
+                    meta: { title: 'Mypage Home' },
+                },
+            ],
+            meta: { middleware: [authMember] },
         },
     ],
 }

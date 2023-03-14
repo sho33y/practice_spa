@@ -1,8 +1,7 @@
 <template>
     <progress-bar></progress-bar>
     <v-header></v-header>
-    <not-found v-if="nf.isNotFound"></not-found>
-    <router-view v-else></router-view>
+    <not-found></not-found>
 </template>
 
 <script>

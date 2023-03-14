@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container" v-if="Object.keys(task).length !== 0">
         <div class="row justify-content-center">
             <div class="col-sm-6">
                 <form>

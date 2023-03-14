@@ -49,7 +49,7 @@ export default {
             try {
                 await pb.start();
                 await as.login(form.value);
-                await router.push({name: 'home'});
+                await router.push({name: 'admin.home'});
             } catch (error) {
                 errors.value = error.response?.data?.errors;
                 await pb.finish();

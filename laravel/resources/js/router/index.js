@@ -1,27 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { adminStore } from '@/store/admin';
 import { memberStore } from '@/store/member';
+import { notFoundStore } from '@/store/notfound';
 import { pbStore } from '@/store/progress-bar';
-
+import middlewarePipeline from "@/middleware/pipeline";
 import adminRoutes from '@/router/admin';
 import memberRoutes from '@/router/member';
-
-// import AuthenticatedLayout from '../layouts/Authenticated.vue';
 import GuestLayout from '@/layouts/Guest.vue';
-
+import NotFoundLayout from '@/layouts/NotFound.vue';
 import Home from '@/pages/Home.vue';
 import TasksIndex from '@/pages/tasks/Index.vue';
 import TasksCreate from '@/pages/tasks/Create.vue';
 import TasksDetail from '@/pages/tasks/Detail.vue';
 import TasksEdit from '@/pages/tasks/Edit.vue';
-
-// function auth(to, from, next) {
-//     if (JSON.parse(localStorage.getItem('loggedIn'))) {
-//         next();
-//     }
-//
-//     next('/login');
-// }
 
 const routes = [
     {
@@ -60,34 +51,15 @@ const routes = [
                 meta: { title: 'Tasks Edit', customPbFinish: true },
                 props: true,
             },
-            ...adminRoutes.routes,
-            ...memberRoutes.routes,
         ],
     },
-    // {
-    //     component: AuthenticatedLayout,
-    //     beforeEnter: auth,
-    //     children: [
-    //         {
-    //             path: '/posts',
-    //             name: 'posts.index',
-    //             component: PostsIndex,
-    //             meta: { title: 'Posts' },
-    //         },
-    //         {
-    //             path: '/posts/create',
-    //             name: 'posts.create',
-    //             component: PostsCreate,
-    //             meta: { title: 'Add new post' },
-    //         },
-    //         {
-    //             path: '/posts/edit/:id',
-    //             name: 'posts.edit',
-    //             component: PostsEdit,
-    //             meta: { title: 'Edit post' },
-    //         },
-    //     ],
-    // },
+    {
+        path: '/:pathMatch(.*)*',
+        component: NotFoundLayout,
+        name: 'notfound',
+    },
+    ...adminRoutes.routes,
+    ...memberRoutes.routes,
 ];
 
 const router = createRouter({
@@ -95,17 +67,45 @@ const router = createRouter({
     routes,
 });
 
-router.beforeResolve(async (to, from, next) => {
+router.beforeResolve((to, from, next) => {
+    const nf = notFoundStore();
     const pb = pbStore();
 
+    // ローディングバー表示
     if (to.name && !pb.isLoading) {
-        await pb.start();
+        pb.start();
     }
-    next();
+
+    // ミドルウェア処理
+    if (!to.meta.middleware) {
+        return next();
+    }
+
+    const { middleware } = to.meta;
+    const context = {
+        to,
+        from,
+        next,
+    };
+
+    return middleware[0]({
+        ...context,
+        next: middlewarePipeline(middleware, context, 1),
+    });
 })
 
 router.afterEach( async (to, from) => {
     const customPbFinish = to.meta.customPbFinish;
+    const baseTitle = 'SPA';
+    const nf = notFoundStore();
+
+    // 404をfalseに設定
+    nf.disable();
+
+    // ページタイトル設定
+    document.title = to.meta.title
+        ? to.meta.title + ' | ' + baseTitle
+        : baseTitle;
 
     // 初回読み込み時にログインユーザー情報をセットする
     if (!from.name) {
@@ -113,6 +113,7 @@ router.afterEach( async (to, from) => {
         await memberStore().checkAuthenticated();
     }
 
+    // ローディングバー非表示
     if (customPbFinish === undefined || customPbFinish === false) {
         // await new Promise(resolve => setTimeout(resolve, 400));
         await pbStore().finish();
