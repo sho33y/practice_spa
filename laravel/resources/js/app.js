@@ -3,7 +3,7 @@ import './bootstrap';
 import { createApp, markRaw } from 'vue';
 import { createPinia } from 'pinia';
 import { createPersistedState } from 'pinia-plugin-persistedstate';
-import router from '@/router';
+import router from '@/routes';
 import Header from '@/components/Header.vue';
 import ProgressBar from '@/components/ProgressBar.vue';
 

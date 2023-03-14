@@ -1,4 +1,4 @@
-import { memberStore } from '@/store/member';
+import { memberStore } from '@/stores/member';
 
 export default function guestMember({ next }) {
     const ms = memberStore();

@@ -46,9 +46,9 @@
 </template>
 
 <script>
-import { adminStore } from '@/store/admin';
-import { memberStore } from '@/store/member';
-import { pbStore } from '@/store/progress-bar';
+import { adminStore } from '@/stores/admin';
+import { memberStore } from '@/stores/member';
+import { pbStore } from '@/stores/progress-bar';
 
 export default {
     setup(props, context) {

@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { adminStore } from '@/store/admin';
-import { memberStore } from '@/store/member';
-import { notFoundStore } from '@/store/notfound';
-import { pbStore } from '@/store/progress-bar';
+import { adminStore } from '@/stores/admin';
+import { memberStore } from '@/stores/member';
+import { notFoundStore } from '@/stores/notfound';
+import { pbStore } from '@/stores/progress-bar';
 import middlewarePipeline from "@/middleware/pipeline";
-import adminRoutes from '@/router/admin';
-import memberRoutes from '@/router/member';
+import adminRoutes from '@/routes/admin';
+import memberRoutes from '@/routes/member';
 import GuestLayout from '@/layouts/Guest.vue';
 import NotFoundLayout from '@/layouts/NotFound.vue';
 import Home from '@/pages/Home.vue';

@@ -50,7 +50,7 @@
 <script>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { pbStore } from "@/store/progress-bar";
+import { pbStore } from "@/stores/progress-bar";
 
 export default {
     setup(props, context) {

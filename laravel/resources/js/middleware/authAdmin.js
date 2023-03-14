@@ -1,4 +1,4 @@
-import { adminStore } from '@/store/admin';
+import { adminStore } from '@/stores/admin';
 
 export default function authAdmin({next}) {
     const as = adminStore();

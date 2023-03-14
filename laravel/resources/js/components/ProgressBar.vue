@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { pbStore } from '@/store/progress-bar';
+import { pbStore } from '@/stores/progress-bar';
 
 export default {
     setup(props, context) {

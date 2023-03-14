@@ -5,8 +5,8 @@
  */
 
 import axios from 'axios';
-import { notFoundStore } from '@/store/notfound';
-import { pbStore } from '@/store/progress-bar';
+import { notFoundStore } from '@/stores/notfound';
+import { pbStore } from '@/stores/progress-bar';
 
 window.axios = axios;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';

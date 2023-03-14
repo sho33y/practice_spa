@@ -34,8 +34,8 @@
 <script>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { memberStore } from '@/store/member';
-import { pbStore } from '@/store/progress-bar';
+import { memberStore } from '@/stores/member';
+import { pbStore } from '@/stores/progress-bar';
 
 export default {
     setup(props, context) {

@@ -6,7 +6,7 @@
 
 <script>
 import NotFound from '@/pages/NotFound.vue'
-import { notFoundStore } from '@/store/notfound';
+import { notFoundStore } from '@/stores/notfound';
 
 export default {
     components: { NotFound },

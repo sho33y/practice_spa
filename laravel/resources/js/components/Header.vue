@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import { adminStore } from '@/store/admin';
-import { memberStore } from '@/store/member';
+import { adminStore } from '@/stores/admin';
+import { memberStore } from '@/stores/member';
 
 export default {
     setup(props, context) {

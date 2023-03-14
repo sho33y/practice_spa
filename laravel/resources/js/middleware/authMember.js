@@ -1,4 +1,4 @@
-import { memberStore } from '@/store/member';
+import { memberStore } from '@/stores/member';
 
 export default function authAdmin({next}) {
     const ms = memberStore();
